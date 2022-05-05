@@ -1,0 +1,4 @@
+viper: true
+totp:
+  mykey: my-totp-secret
+

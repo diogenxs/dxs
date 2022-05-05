@@ -1,26 +1,20 @@
 package cmd
 
 import (
-	"io"
-	"net/http"
-	"os"
+	"fmt"
 
+	"github.com/diogenxs/dxs/pkg"
 	"github.com/spf13/cobra"
 )
 
 // myipCmd represents the myip command
 var myipCmd = &cobra.Command{
-	Use:   "myip",
-	Short: "Show public IP",
-	Long:  `Show public IP by consulting https://ifconfig.me`,
+	Use:     "myip",
+	Aliases: []string{"my-ip"},
+	Short:   "Show public IP",
+	Long:    `Show public IP by consulting https://ifconfig.me`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		resp, err := http.Get("https://ifconfig.me")
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-
-		io.Copy(os.Stdout, resp.Body)
+		fmt.Println(pkg.MyPublicIP())
 		return nil
 	},
 }
