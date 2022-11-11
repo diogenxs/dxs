@@ -18,6 +18,9 @@ var totpCmd = &cobra.Command{
 	// Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		m := viper.GetStringMapString("totp")
+		if len(m) == 0 {
+			fmt.Println("No keys added to config file: ", viper.ConfigFileUsed())
+		}
 		if len(args) < 1 {
 			fmt.Println("Possible keys:")
 			for k := range m {
@@ -33,10 +36,13 @@ var totpCmd = &cobra.Command{
 			}
 
 			t := &totp.TOTP{Secret: secret, IsBase32Secret: true}
-			fmt.Println(t.Get())
+			token := t.Get()
 
 			if v, _ := cmd.Flags().GetBool("copy"); v {
 				utils.NewNotification("dxs", fmt.Sprintf("TOTP \"%s\" copied to clipboard", args[0]))
+				utils.WriteToClipboard(token)
+			} else {
+				fmt.Printf("%s", token)
 			}
 		}
 	},
@@ -45,15 +51,5 @@ var totpCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(totpCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// totpCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	totpCmd.Flags().BoolP("copy", "c", false, "Copy the secret to clipboard")
-	// rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	// viper.BindPFlag("viper", rootCmd.PersistentFlags().Lookup("viper"))
 }
