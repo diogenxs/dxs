@@ -47,7 +47,7 @@ func getK8sConfig() (*restClient.Config, error) {
 		return config, nil
 	}
 
-	fmt.Println("error creating client InCluster, fallback to kubeconfig")
+	// fmt.Println("error creating client InCluster, fallback to kubeconfig")
 
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
@@ -86,3 +86,7 @@ func (k *K8sClient) ListNodesByLabel(label string) (*v1.NodeList, error) {
 
 	return n, nil
 }
+
+// func (k *K8sClient) DrainNode(node *v1.Node) error {
+// 	k.clientset.CoreV1().Nodes().Update(context.Background(), node, metav1.UpdateOptions{})
+// }

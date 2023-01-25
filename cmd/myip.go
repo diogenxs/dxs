@@ -14,7 +14,8 @@ var myipCmd = &cobra.Command{
 	Short:   "Show public IP",
 	Long:    `Show public IP by consulting https://ifconfig.me`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println(pkg.MyPublicIP())
+		verbose, _ := cmd.Flags().GetBool("verbose")
+		fmt.Println(pkg.MyPublicIP(verbose))
 		return nil
 	},
 }
