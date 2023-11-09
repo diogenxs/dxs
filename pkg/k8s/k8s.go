@@ -56,7 +56,6 @@ func getK8sConfig() (*restClient.Config, error) {
 		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 	}
 	flag.Parse()
-
 	config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err == nil {
 		return config, nil
@@ -65,7 +64,7 @@ func getK8sConfig() (*restClient.Config, error) {
 	return nil, err
 }
 
-func (k *K8sClient) ListPendingPods() error {
+func (k *K8sClient) ListEvents() error {
 	ev, err := k.clientset.CoreV1().Events("default").List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		return err
@@ -73,6 +72,19 @@ func (k *K8sClient) ListPendingPods() error {
 
 	fmt.Println(ev)
 	return nil
+}
+
+// ListPods returns a list of all pending pods all namespaces.
+func (k *K8sClient) ListPendingPods(namespace string) (*v1.PodList, error) {
+	// get all pending pods
+	podList, err := k.clientset.CoreV1().Pods(namespace).List(context.Background(), metav1.ListOptions{
+		FieldSelector: "status.phase=Pending",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return podList, nil
 }
 
 func (k *K8sClient) ListNodesByLabel(label string) (*v1.NodeList, error) {

@@ -1,0 +1,38 @@
+{{define "content"}}
+<div class="bg-white rounded-lg p-4">
+    <!-- <h3 class="text-lg font-semibold mb-4">Main Content</h3> -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ENV</th>
+                    <!-- <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Role</th> -->
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700" hx-target="closest tr" hx-swap="outerHTML">
+                {{ range . }}
+                <tr>
+                    <td class="text-left py-3 px-4">{{ .Fingerprint }}</td>
+                    <td class="text-left py-3 px-4">
+                        <a href="{{ .GeneratorURL }}" target="_blank">
+                            {{ index .Labels "alertname" }}
+                        </a>
+                    </td>
+                    <td class="text-left py-3 px-4">{{ index .Labels "env" }}</td>
+                    <td class="text-left py-3 px-4">
+                        <button hx-delete="/alerts/{{.Fingerprint }}" hx-indicator="#loading"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            ACK
+                        </button>
+                        <!-- <a href="#" class="text-red-500">Delete</a> -->
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

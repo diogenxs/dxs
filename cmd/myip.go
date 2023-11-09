@@ -31,5 +31,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// myipCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	myipCmd.Flags().BoolP("wait", "w", false, "Wait for all requests to finish")
 }

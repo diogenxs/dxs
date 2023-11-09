@@ -18,19 +18,29 @@ var k8sCmd = &cobra.Command{
 }
 
 var listPendingPodsCmd = &cobra.Command{
-	Use:     "listPendingPods",
+	Use:     "lpp [namespace]",
 	Short:   "List pending pods",
 	Aliases: []string{"lpp"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("listing pods...")
+		var namespace string
+
+		if len(args) > 0 {
+			namespace = args[0]
+		}
+
+		fmt.Println("listing pending pods...")
 		client, err := k8s.NewK8sClient()
 		if err != nil {
 			fmt.Println(err)
 		}
 
-		err = client.ListPendingPods()
+		pods, err := client.ListPendingPods(namespace)
 		if err != nil {
 			fmt.Println(err)
+		}
+		for _, pod := range pods.Items {
+			fmt.Println(pod.Name)
+			// fmt.Println(k8s.PrettyPrintJSON(pod))
 		}
 	},
 }

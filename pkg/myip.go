@@ -2,17 +2,22 @@ package pkg
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"github.com/diogenxs/dxs/utils"
 )
 
 func MyPublicIP(verbose bool) string {
+	urlList := []string{
+		"http://icanhazip.com",
+		"https://ifconfig.me",
+		"https://api.ipify.org",
+		"http://checkip.amazonaws.com",
+	}
 	result := make(chan string, 1)
-	go makeHttpRequest("http://icanhazip.com", result, verbose)
-	go makeHttpRequest("https://ifconfig.me", result, verbose)
-	go makeHttpRequest("https://api.ipify.org", result, verbose)
-	go makeHttpRequest("http://checkip.amazonaws.com", result, verbose)
+	for _, url := range urlList {
+		go makeHttpRequest(url, result, verbose)
+	}
 
 	return <-result
 }
@@ -25,7 +30,7 @@ func makeHttpRequest(url string, c chan string, verbose bool) {
 	}
 	defer resp.Body.Close()
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 
 	c <- string(result)
 }

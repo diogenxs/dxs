@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="min-h-screen flex flex-col">
+        <!-- Navbar -->
+        <nav class="bg-gray-800 p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="/" class="text-white text-xl font-semibold">Dashboard</a>
+                <!-- <div>
+                    <a href="#" class="text-white px-4">Settings</a>
+                    <a href="#" class="text-white px-4">Profile</a>
+                    <a href="#" class="text-white px-4">Logout</a>
+                </div> -->
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <div class="flex-grow container mx-auto p-6">
+            <div class="flex flex-wrap -mx-4">
+                <!-- Sidebar -->
+                <div class="w-full md:w-1/4 px-4">
+                    <div class="bg-white rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-4">Tools</h3>
+                        <ul>
+                            <li class="mb-2">
+                                <div hx-get="/alerts" hx-target="#main-content" hx-indicator="#loading"
+                                    hx-push-url="true" class="text-gray-600 no-underline hover:underline">
+                                    Alerts
+                                </div>
+                                <div hx-get="/k8s-clusters" hx-target="#main-content" hx-indicator="#loading"
+                                    hx-push-url="true" class="text-gray-600 no-underline hover:underline">
+                                    K8s clusters
+                                </div>
+                            </li>
+                            <!-- <li class="mb-2">
+                                <a href="#" class="text-gray-600">Users</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray-600">Settings</a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+                <!-- Main content area -->
+                <div id="main-content" class="w-full md:w-3/4 px-4">
+                    {{block "content" . }}{{end}}
+                    <!-- <div class="bg-white rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-4">Main Content</h3>
+                        <p>This is the main content area.</p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <!-- <footer class="bg-gray-800 p-4">
+            <div class="container mx-auto text-center text-white">
+                © 2023 Your Company Name
+            </div>
+        </footer> -->
+    </div>
+    <div id="loading"
+        class="hidden htmx-indicator fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
+        <div class="w-8 h-8 border-4 border-blue-400 border-dashed rounded-full animate-spin"></div>
+    </div>
+</body>
+
+</html>
